@@ -1,0 +1,44 @@
+{
+  "name": "doc-test",
+  "version": "1.0.0",
+  "description": "[![Tests](https://github.com/ULL-ESIT-INF-DSI-2223/github-actions-sonar-cloud/actions/workflows/node.js.yml/badge.svg?branch=main)](https://github.com/ULL-ESIT-INF-DSI-2223/github-actions-sonar-cloud/actions/workflows/node.js.yml)",
+  "main": "basicFunctions.js",
+  "type": "module",
+  "scripts": {
+    "start": "tsc-watch --onSuccess \"node dist/main.js\"",
+    "doc": "typedoc",
+    "test": "mocha",
+    "coverage": "c8 npm test && c8 report --reporter=lcov"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/chai": "^4.3.4",
+    "@types/mocha": "^10.0.1",
+    "@types/node": "^18.15.11",
+    "@types/yargs": "^17.0.24",
+    "@typescript-eslint/eslint-plugin": "^5.58.0",
+    "@typescript-eslint/parser": "^5.58.0",
+    "c8": "^7.13.0",
+    "chai": "^4.3.7",
+    "coveralls": "^3.1.1",
+    "eslint": "^8.33.0",
+    "eslint-config-prettier": "^8.8.0",
+    "mocha": "^10.2.0",
+    "nyc": "^15.1.0",
+    "prettier": "^2.8.7",
+    "ts-node": "^10.9.1",
+    "tsc-watch": "^6.0.0",
+    "typedoc": "^0.23.28",
+    "typescript": "^4.9.5"
+  },
+  "directories": {
+    "doc": "docs",
+    "test": "tests"
+  },
+  "dependencies": {
+    "chalk": "^5.2.0",
+    "yargs": "^17.7.1"
+  }
+}
