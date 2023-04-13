@@ -1,28 +1,40 @@
-//tsc-watch --onSuccess "node dist/main.js" 
 import net from 'net';
-import {watchFile} from 'fs';
+import { exec } from 'child_process';
 
-if (process.argv.length !== 3) {
-  console.log('Please, provide a filename.');
-} else {
-  const fileName = process.argv[2];
+/**
+ * El programa servidor realiza la conexión continua con
+ * el cliente. Este recibe el comando a ejecutar dentro 
+ * de la terminal, así como devolver por la terminal 
+ * del cliente el resultado de la ejecución del comando
+ */
+const server = net.createServer(connection => {
 
-  net.createServer((connection) => {
-    console.log('A client has connected.');
+  /**
+   * Cuando el servidor reciba la petición y conexión
+   * con un cliente, muestra el mensaje por pantalla.
+   */
+  console.log('Client connected.');
 
-    connection.write(JSON.stringify({'type': 'watch', 'file': fileName}) +
-      '\n');
+  connection.on('data', data => {
+    const [command, ...args] = data.toString().trim().split(' ');
+    console.log(`Received command: ${command} ${args}`);
 
-    watchFile(fileName, (curr, prev) => {
-      connection.write(JSON.stringify({
-        'type': 'change', 'prevSize': prev.size, 'currSize': curr.size}) +
-         '\n');
+    exec(`${command} ${args.join(' ')}`, (error, stdout, stderr) => {
+      const output = error ? stderr : stdout;
+      connection.write(output);
     });
-
-    connection.on('close', () => {
-      console.log('A client has disconnected.');
-    });
-  }).listen(60300, () => {
-    console.log('Waiting for clients to connect.');
   });
-}  
+
+  /**
+   * Muestra el mensaje cuando se cierre la conexión con el servidor,
+   * de parte del cliente.
+   */
+  connection.on('close', () => {
+    console.log('Client disconnected.');
+  });
+});
+
+const PORT = 60300;
+server.listen(PORT, () => {
+  console.log(`Server listening on port ${PORT}`);
+});
